@@ -1,0 +1,29 @@
+base: 'https://mycospecies.ddev.site:8043'
+frontendBase: ''
+languages:
+  -
+    title: English
+    enabled: true
+    languageId: 0
+    base: /
+    locale: en_US.UTF-8
+    navigationTitle: English
+    flag: us
+rootPageId: 1
+websiteTitle: MycoSpecies
+
+routeEnhancers:
+  MycospeciesShowSpeciesPlugin:
+    type: Extbase
+    extension: mycospecies
+    plugin: ShowSpecies
+    routes:
+      - { routePath: '/{id}', _controller: 'Species::show', _arguments: {'id': 'id'} }
+    requirements:
+      id: '\d+'
+  MycospeciesAutocompletePlugin:
+    type: Extbase
+    extension: mycospecies
+    plugin: Autocomplete
+    routes:
+      - { routePath: '/{query}', _controller: 'Species::autocomplete', _arguments: { 'query': 'query' } }

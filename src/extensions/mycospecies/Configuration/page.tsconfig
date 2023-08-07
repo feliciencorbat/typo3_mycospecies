@@ -1,0 +1,35 @@
+mod.wizards.newContentElement.wizardItems {
+  plugins {
+    elements {
+      mycospecies_showspecies {
+        iconIdentifier = tx_mycospecies_logo
+        title = Show Species
+        description = Show Species by id
+        tt_content_defValues {
+          CType = list
+          list_type = mycospecies_showspecies
+        }
+      }
+    }
+
+    show = *
+  }
+}
+
+mod.wizards.newContentElement.wizardItems {
+  plugins {
+    elements {
+      mycospecies_autocomplete {
+        iconIdentifier = tx_mycospecies_logo
+        title = Autocomplete
+        description = Autocomplete
+        tt_content_defValues {
+          CType = list
+          list_type = mycospecies_autocomplete
+        }
+      }
+    }
+
+    show = *
+  }
+}
