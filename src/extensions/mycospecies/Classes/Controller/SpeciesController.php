@@ -33,7 +33,7 @@ final class SpeciesController extends ActionController
                 'message' => $e->getMessage(),
                 'status' => $e->getCode()
             ]);
-            return $this->jsonResponse($jsonException)->withStatus(400);
+            return $this->jsonResponse($jsonException)->withStatus($this->getStatus($e->getCode()));
         }
     }
 
@@ -49,7 +49,18 @@ final class SpeciesController extends ActionController
                 'message' => $e->getMessage(),
                 'status' => $e->getCode()
             ]);
-            return $this->jsonResponse($jsonException)->withStatus(400);
+
+            return $this->jsonResponse($jsonException)->withStatus($this->getStatus($e->getCode()));
+        }
+    }
+
+    private function getStatus(int $code): int
+    {
+        if ($code < 100 || $code >= 600)
+        {
+            return 400;
+        } else {
+            return $code;
         }
     }
 }
