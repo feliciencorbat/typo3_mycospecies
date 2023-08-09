@@ -20,11 +20,11 @@ class SpeciesSerializer
         ]);
     }
 
-    public function deserializeSpecies(stdClass $stdClassSpecies): Species
+    public function deserializeSpecies(stdClass $stdClassSpecies, int $cfId): Species
     {
         $species = new Species();
         $species->setId($stdClassSpecies->key);
-        $species->setCfId(0);
+        $species->setCfId($cfId);
         $species->setCanonicalName($stdClassSpecies->canonicalName);
         $species->setScientificName($stdClassSpecies->scientificName);
         $species->setAuthor($stdClassSpecies->authorship);

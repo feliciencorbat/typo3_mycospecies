@@ -27,3 +27,5 @@ routeEnhancers:
     plugin: Autocomplete
     routes:
       - { routePath: '/{query}', _controller: 'Species::autocomplete', _arguments: { 'query': 'query' } }
+    requirements:
+      query: '[a-zA-Z][a-zA-Z ]*'

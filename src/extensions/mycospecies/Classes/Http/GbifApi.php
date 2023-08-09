@@ -23,7 +23,7 @@ class GbifApi
      * @return Species
      * @throws \JsonException
      */
-	public function getGbifSpecies(int $gbifId): Species
+	public function getGbifSpecies(int $gbifId, int $cfId): Species
     {
         // Additional headers for this specific request
         // See: https://docs.guzzlephp.org/en/stable/request-options.html
@@ -59,7 +59,7 @@ class GbifApi
         $content = $response->getBody()->getContents();
         $stdObjectSpecies = json_decode($content, false, flags: JSON_THROW_ON_ERROR);
 
-        return $this->speciesSerializer->deserializeSpecies($stdObjectSpecies);
+        return $this->speciesSerializer->deserializeSpecies($stdObjectSpecies, $cfId);
     }
 
     public function getGbifAutocomplete(string $query): array

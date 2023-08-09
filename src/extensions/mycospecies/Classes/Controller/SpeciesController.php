@@ -7,6 +7,7 @@ use Feliciencorbat\Mycospecies\Http\GbifApi;
 use Feliciencorbat\Mycospecies\Serializer\SpeciesSerializer;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 final class SpeciesController extends ActionController
 {
@@ -20,7 +21,11 @@ final class SpeciesController extends ActionController
     {
         try {
             $speciesId = (int)$this->request->getArgument('id');
-            $species = $this->gbifApi->getGbifSpecies($speciesId);
+            $speciesCfId = 0;
+            if (isset($this->request->getQueryParams()['cfId'])) {
+                $speciesCfId = (int)$this->request->getQueryParams()['cfId'];
+            }
+            $species = $this->gbifApi->getGbifSpecies($speciesId, $speciesCfId);
             $jsonSpecies = $this->speciesSerializer->serializeSpecies($species);
             return $this->jsonResponse($jsonSpecies);
         } catch(Exception $e) {
@@ -28,7 +33,7 @@ final class SpeciesController extends ActionController
                 'message' => $e->getMessage(),
                 'status' => $e->getCode()
             ]);
-            $this->throwStatus($e->getCode(), null, $jsonException);
+            return $this->jsonResponse($jsonException)->withStatus(400);
         }
     }
 
@@ -44,7 +49,7 @@ final class SpeciesController extends ActionController
                 'message' => $e->getMessage(),
                 'status' => $e->getCode()
             ]);
-            $this->throwStatus($e->getCode(), null, $jsonException);
+            return $this->jsonResponse($jsonException)->withStatus(400);
         }
     }
 }
