@@ -4,6 +4,7 @@ namespace Feliciencorbat\Mycospecies\Serializer;
 
 use Feliciencorbat\Mycospecies\Domain\Model\Species;
 use stdClass;
+use TYPO3\CMS\Extbase\Utility\Exception\InvalidTypeException;
 
 class SpeciesSerializer
 {
@@ -16,7 +17,9 @@ class SpeciesSerializer
             'scientificName' => $species->getScientificName(),
             'author' => $species->getAuthor(),
             'status' => $species->getStatus(),
-            'rank' => $species->getRank()
+            'rank' => $species->getRank(),
+            'basionym' => $species->getBasionym(),
+            'vernacularName' => $species->getVernacularName(),
         ]);
     }
 
@@ -30,22 +33,33 @@ class SpeciesSerializer
         $species->setAuthor($stdClassSpecies->authorship);
         $species->setStatus($stdClassSpecies->taxonomicStatus);
         $species->setRank($stdClassSpecies->rank);
+        $species->setBasionym($stdClassSpecies->basionym);
+        $species->setVernacularName($stdClassSpecies->vernacularName);
 
         return $species;
     }
 
+    /**
+     * @throws InvalidTypeException
+     */
     public function serializeAutocomplete(array $speciesList): string
     {
         $jsonSpeciesList = [];
         foreach ($speciesList as $species) {
-            $jsonSpecies = [
-                'id' => $species->getId(),
-                'canonicalName' => $species->getCanonicalName(),
-                'scientificName' => $species->getScientificName(),
-                'status' => $species->getStatus(),
-                'rank' => $species->getRank()
-            ];
-            $jsonSpeciesList[] = $jsonSpecies;
+
+            if ($species instanceof Species) {
+                $jsonSpecies = [
+                    'id' => $species->getId(),
+                    'canonicalName' => $species->getCanonicalName(),
+                    'scientificName' => $species->getScientificName(),
+                    'status' => $species->getStatus(),
+                    'rank' => $species->getRank()
+                ];
+                $jsonSpeciesList[] = $jsonSpecies;
+            } else {
+                throw new InvalidTypeException("L'élément n'est pas un objet de type Species", 500);
+            }
+
         }
         return json_encode($jsonSpeciesList);
     }
